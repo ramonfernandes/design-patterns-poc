@@ -14,9 +14,10 @@ public class CustomerDAO {
 
     public boolean createCustomer(CustomerImplementation customer) {
         try (Connection conn = Connect.abrir()) {
-            if (checkIfCreatable(customer)) {
+            if (compareImplementationType(customer, ImplementationType.DELETE)) {
                 StringBuilder sql = new StringBuilder();
-                sql.append("INSERT INTO customer(customer_id, name) VALUES ('" +
+                sql.append("INSERT INTO customer(event_id, customer_id, name) VALUES ('" +
+                        getLastEventIndexFromCPF(customer.getCpf()) + "','" +
                         customer.getCpf() + "','" +
                         customer.getName() +"');");
                 PreparedStatement comando = conn.prepareStatement(sql.toString());
@@ -29,13 +30,13 @@ public class CustomerDAO {
         return false;
     }
 
-    private boolean checkIfCreatable(CustomerImplementation customer) {
+    private boolean compareImplementationType(CustomerImplementation customer, ImplementationType toCompare) {
         try (Connection conn = Connect.abrir()) {
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT event_type FROM customer WHERE customer_id = " + customer.getCpf() + " ORDER BY event_id DESC LIMIT 1;");
             PreparedStatement comando = conn.prepareStatement(sql.toString());
             ResultSet resultado = comando.executeQuery();
-            if (!resultado.next() || resultado.equals(ImplementationType.DELETE))
+            if (resultado.equals(toCompare))
                 return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,7 +50,8 @@ public class CustomerDAO {
             sql.append("SELECT event_id FROM customer WHERE customer_id = " + cpf + " ORDER BY event_id DESC LIMIT 1;");
             PreparedStatement comando = conn.prepareStatement(sql.toString());
             ResultSet resultado = comando.executeQuery();
-            return resultado.getInt(0);
+            if(resultado.next())
+                return resultado.getInt(0)+1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
