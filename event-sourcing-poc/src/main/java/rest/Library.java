@@ -1,7 +1,7 @@
 package rest;
 
 import dao.CustomerDAO;
-import dao.ImplementationType;
+import config.ImplementationType;
 import org.springframework.stereotype.Service;
 import pojo.CustomerImplementation;
 

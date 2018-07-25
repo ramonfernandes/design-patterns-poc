@@ -1,5 +1,7 @@
 package dao;
 
+import config.Connect;
+import config.ImplementationType;
 import pojo.CustomerImplementation;
 
 import java.sql.Connection;
@@ -12,18 +14,9 @@ import java.util.List;
 public class CustomerDAO {
 
     public boolean executeOperationForCostumer(CustomerImplementation customer){
-        ImplementationType condition1;
-        ImplementationType condition2;
-        if(customer.getType() == ImplementationType.CREATE) {
-            condition1 = ImplementationType.DELETE;
-            condition2 = ImplementationType.UNEXISTENT;
-        }else{
-            condition1 = ImplementationType.CREATE;
-            condition2 = ImplementationType.UPDATE;
-        }
         CustomerImplementation customerImplementation = getLastElementFromList(getEventsFromCPF(customer.getCpf()));
         try (Connection conn = Connect.abrir()) {
-            if (compareImplementationType(customerImplementation, condition1) || compareImplementationType(customerImplementation, condition2)) {
+            if (validadeOperation(customer, customerImplementation)) {
                 StringBuilder sql = new StringBuilder();
                 sql.append("INSERT INTO customer(event_id, customer_id, name, event_type) VALUES ('" +
                         (customerImplementation.getEventId() + 1) + "','" +
@@ -67,8 +60,26 @@ public class CustomerDAO {
         return list.get(size-1);
     }
 
-    private boolean compareImplementationType(CustomerImplementation customer, ImplementationType toCompare) {
-        return customer.getType().equals(toCompare);
+    private boolean compareEvents(CustomerImplementation customer, CustomerImplementation toCompare){
+        return (customer.getName().equals(toCompare.getName())
+                && customer.getCpf().equals(toCompare.getCpf()));
+    }
+
+    private boolean validadeOperation(CustomerImplementation newEvent, CustomerImplementation lastEvent){
+        ImplementationType condition1;
+        ImplementationType condition2;
+        if(newEvent.getType() == ImplementationType.CREATE) {
+            condition1 = ImplementationType.DELETE;
+            condition2 = ImplementationType.UNEXISTENT;
+        }else{
+            condition1 = ImplementationType.CREATE;
+            condition2 = ImplementationType.UPDATE;
+        }
+        return ((lastEvent.getType().equals(condition1)
+                || lastEvent.getType().equals(condition2))
+                && (compareEvents(newEvent, lastEvent)
+                || lastEvent.getType() == ImplementationType.UNEXISTENT
+                || newEvent.getType() == ImplementationType.UPDATE));
     }
 }
 

@@ -1,6 +1,6 @@
 package pojo;
 
-import dao.ImplementationType;
+import config.ImplementationType;
 
 public class BookImplementation {
 
@@ -21,5 +21,17 @@ public class BookImplementation {
     public BookImplementation setType(ImplementationType type){
         this.type = type;
         return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAutor() {
+        return autor;
+    }
+
+    public ImplementationType getType() {
+        return type;
     }
 }

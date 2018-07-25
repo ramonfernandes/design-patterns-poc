@@ -1,8 +1,6 @@
 package pojo;
 
-import dao.ImplementationType;
-
-import java.time.LocalDate;
+import config.ImplementationType;
 
 public class CustomerImplementation {
 
