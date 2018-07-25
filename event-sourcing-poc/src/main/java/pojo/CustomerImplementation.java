@@ -9,6 +9,7 @@ public class CustomerImplementation {
     private String cpf;
     private String name;
     private ImplementationType type;
+    private int eventId;
 
     public CustomerImplementation setName(String name) {
         this.name = name;
@@ -25,6 +26,11 @@ public class CustomerImplementation {
         return this;
     }
 
+    public CustomerImplementation setEventId(int id) {
+        this.eventId = id;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
@@ -35,5 +41,9 @@ public class CustomerImplementation {
 
     public String getCpf() {
         return cpf;
+    }
+
+    public int getEventId() {
+        return eventId;
     }
 }

@@ -28,8 +28,6 @@ CREATE TABLE `library`.`loan`(
   PRIMARY KEY (`event_id`)
 );
 
-INSERT INTO `customer` (`customer_id`, `event_type`, `name`) VALUES (0,'CREATE','Zeca');
-
-SELECT event_type FROM customer WHERE customer_id = 0 ORDER BY event_id DESC LIMIT 1;
-
-ALTER TABLE `customer` CHANGE ``
+-- INSERT INTO `customer` (`customer_id`, `event_type`, `name`) VALUES (0,'CREATE','Zeca');
+--
+-- SELECT event_type FROM customer WHERE customer_id = 0 ORDER BY event_id DESC LIMIT 1;

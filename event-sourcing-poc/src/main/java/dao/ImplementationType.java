@@ -1,5 +1,5 @@
 package dao;
 
 public enum ImplementationType {
-    CREATE, DELETE, UPDATE;
+    CREATE, DELETE, UPDATE, UNEXISTENT;
 }
