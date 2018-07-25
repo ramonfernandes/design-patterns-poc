@@ -15,7 +15,7 @@ CREATE TABLE `library`.`book`(
   `book_id` INT NOT NULL,
   `event_type` ENUM('CREATE', 'UPDATE', 'DELETE') NOT NULL,
   `name` VARCHAR (255) NOT NULL,
-  `autor` DATE NULL,
+  `autor` VARCHAR (255) NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -29,5 +29,4 @@ CREATE TABLE `library`.`loan`(
 );
 
 -- INSERT INTO `customer` (`customer_id`, `event_type`, `name`) VALUES (0,'CREATE','Zeca');
---
 -- SELECT event_type FROM customer WHERE customer_id = 0 ORDER BY event_id DESC LIMIT 1;

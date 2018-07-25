@@ -13,16 +13,16 @@ import java.util.List;
 
 public class CustomerDAO {
 
-    public boolean executeOperationForCostumer(CustomerImplementation customer){
-        CustomerImplementation customerImplementation = getLastElementFromList(getEventsFromCPF(customer.getCpf()));
+    public boolean executeOperationForCostumer(CustomerImplementation newEvent){
+        CustomerImplementation lastEvent = getLastElementFromList(getEventsFromCPF(newEvent.getCpf()));
         try (Connection conn = Connect.abrir()) {
-            if (validadeOperation(customer, customerImplementation)) {
+            if (validadeOperation(newEvent, lastEvent)) {
                 StringBuilder sql = new StringBuilder();
                 sql.append("INSERT INTO customer(event_id, customer_id, name, event_type) VALUES ('" +
-                        (customerImplementation.getEventId() + 1) + "','" +
-                        customer.getCpf() + "', '" +
-                        customer.getName() +
-                        "', '"+customer.getType()+"');");
+                        (lastEvent.getEventId() + 1) + "','" +
+                        newEvent.getCpf() + "', '" +
+                        newEvent.getName() +
+                        "', '"+newEvent.getType()+"');");
                 PreparedStatement comando = conn.prepareStatement(sql.toString());
                 comando.execute();
                 return true;
