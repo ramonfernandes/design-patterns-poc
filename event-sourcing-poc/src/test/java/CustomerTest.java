@@ -44,6 +44,34 @@ public class CustomerTest {
         Assert.assertEquals(ImplementationType.DELETE, customer.getEventsFromCPF("0").get(size-1).getType());
     }
 
+    @Test
+    public void couldNotCreateANUserWithTheSameCPF(){
+        shouldCreateACustomer();
+        Assert.assertFalse(customer.executeOperationForCostumer(new CustomerImplementation().setCpf("0").setName("Zequinha").setType(ImplementationType.CREATE)));
+    }
+
+    @Test
+    public void couldNotDeleteAnUserThatsNotCreated(){
+        Assert.assertFalse(customer.executeOperationForCostumer(new CustomerImplementation().setCpf("0").setName("Zeca").setType(ImplementationType.DELETE)));
+    }
+
+    @Test
+    public void couldNotUpdateAnUserThatsNotCreated(){
+        Assert.assertFalse(customer.executeOperationForCostumer(new CustomerImplementation().setCpf("0").setName("Zeca").setType(ImplementationType.DELETE)));
+    }
+
+    @Test
+    public void couldNotDeleteTwiceInARow(){
+        shouldDeleteACustomer();
+        Assert.assertFalse(customer.executeOperationForCostumer(new CustomerImplementation().setCpf("0").setName("Zeca").setType(ImplementationType.DELETE)));
+    }
+
+    @Test
+    public void couldNotUpdateAfterDelete(){
+        shouldDeleteACustomer();
+        Assert.assertFalse(customer.executeOperationForCostumer(new CustomerImplementation().setCpf("0").setName("Zequinha").setType(ImplementationType.UPDATE)));
+    }
+
     private void dropCustomer(){
         try (Connection conn = Connect.abrir()) {
                 StringBuilder sql = new StringBuilder();
