@@ -10,60 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAO {
-    public boolean addTransaction(CustomerImplementation customer) {
-        return createCustomer(customer);
-    }
 
-    public boolean createCustomer(CustomerImplementation customer) {
-        CustomerImplementation customerImplementation = getLastElementFromList(getEventsFromCPF(customer.getCpf()));
-        try (Connection conn = Connect.abrir()) {
-            if (compareImplementationType(customerImplementation, ImplementationType.DELETE) || compareImplementationType(customerImplementation, ImplementationType.UNEXISTENT)) {
-                StringBuilder sql = new StringBuilder();
-                sql.append("INSERT INTO customer(event_id, customer_id, name, event_type) VALUES (" +
-                        customerImplementation.getEventId() + 1 + ",'" +
-                        customer.getCpf() + "', '" +
-                        customer.getName() +
-                        "', 'CREATE');");
-                PreparedStatement comando = conn.prepareStatement(sql.toString());
-                comando.execute();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public boolean executeOperationForCostumer(CustomerImplementation customer){
+        ImplementationType condition1;
+        ImplementationType condition2;
+        if(customer.getType() == ImplementationType.CREATE) {
+            condition1 = ImplementationType.DELETE;
+            condition2 = ImplementationType.UNEXISTENT;
+        }else{
+            condition1 = ImplementationType.CREATE;
+            condition2 = ImplementationType.UPDATE;
         }
-        return false;
-    }
-
-    public boolean updateCostumer(CustomerImplementation customer) {
         CustomerImplementation customerImplementation = getLastElementFromList(getEventsFromCPF(customer.getCpf()));
         try (Connection conn = Connect.abrir()) {
-            if (compareImplementationType(customerImplementation, ImplementationType.CREATE) || compareImplementationType(customerImplementation, ImplementationType.UPDATE)) {
+            if (compareImplementationType(customerImplementation, condition1) || compareImplementationType(customerImplementation, condition2)) {
                 StringBuilder sql = new StringBuilder();
                 sql.append("INSERT INTO customer(event_id, customer_id, name, event_type) VALUES ('" +
-                        customerImplementation.getEventId() + 1 + "','" +
+                        (customerImplementation.getEventId() + 1) + "','" +
                         customer.getCpf() + "', '" +
                         customer.getName() +
-                        "', 'UPDATE');");
-                PreparedStatement comando = conn.prepareStatement(sql.toString());
-                comando.execute();
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean deleteCostumer(CustomerImplementation customer){
-        CustomerImplementation customerImplementation = getLastElementFromList(getEventsFromCPF(customer.getCpf()));
-        try (Connection conn = Connect.abrir()) {
-            if (compareImplementationType(customerImplementation, ImplementationType.CREATE) || compareImplementationType(customerImplementation, ImplementationType.UPDATE)) {
-                StringBuilder sql = new StringBuilder();
-                sql.append("INSERT INTO customer(event_id, customer_id, name, event_type) VALUES ('" +
-                        customerImplementation.getEventId() + 1 + "','" +
-                        customer.getCpf() + "', '" +
-                        customer.getName() +
-                        "', 'DELETE');");
+                        "', '"+customer.getType()+"');");
                 PreparedStatement comando = conn.prepareStatement(sql.toString());
                 comando.execute();
                 return true;
@@ -94,7 +60,7 @@ public class CustomerDAO {
         return result;
     }
 
-    private CustomerImplementation getLastElementFromList(List<CustomerImplementation> list) {
+    public CustomerImplementation getLastElementFromList(List<CustomerImplementation> list) {
         int size = list.size();
         if (size == 0)
             return new CustomerImplementation().setType(ImplementationType.UNEXISTENT).setEventId(0);

@@ -1,6 +1,6 @@
-/*package Main;
+package Main;
 
-import com.ramonfernades.app.config.AppConfig;
+import config.AppConfig;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -16,7 +16,7 @@ public class CFXRunner {
         final ServletHolder servletHolder = new ServletHolder(new CXFServlet());
         final ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");
-        context.addServlet(servletHolder, "/rest/*");
+        context.addServlet(servletHolder, "/*");
         context.addEventListener(new ContextLoaderListener());
 
         context.setInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName());
@@ -26,4 +26,4 @@ public class CFXRunner {
         server.start();
         server.join();
     }
-}*/
+}
