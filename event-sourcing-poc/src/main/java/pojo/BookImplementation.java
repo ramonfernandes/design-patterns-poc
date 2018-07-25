@@ -2,10 +2,13 @@ package pojo;
 
 import config.ImplementationType;
 
+
 public class BookImplementation {
 
+    private int eventId;
     private String name;
     private String autor;
+    private int quantity_avaliable;
     private ImplementationType type;
 
     public BookImplementation setName(String name) {
@@ -23,6 +26,16 @@ public class BookImplementation {
         return this;
     }
 
+    public BookImplementation setEventId(int eventId) {
+        this.eventId = eventId;
+        return this;
+    }
+
+    public BookImplementation setQuantity_avaliable(int quantity_avaliable) {
+        this.quantity_avaliable = quantity_avaliable;
+        return this;
+    }
+
     public String getName() {
         return name;
     }
@@ -33,5 +46,13 @@ public class BookImplementation {
 
     public ImplementationType getType() {
         return type;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public int getQuantity_avaliable() {
+        return quantity_avaliable;
     }
 }

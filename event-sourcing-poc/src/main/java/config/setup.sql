@@ -16,6 +16,7 @@ CREATE TABLE `library`.`book`(
   `event_type` ENUM('CREATE', 'UPDATE', 'DELETE') NOT NULL,
   `name` VARCHAR (255) NOT NULL,
   `autor` VARCHAR (255) NULL,
+  `quantity_avaliable` INT NOT NULL,
   PRIMARY KEY (`id`)
 );
 
